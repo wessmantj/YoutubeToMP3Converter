@@ -23,15 +23,15 @@ app.get("/", (req, res) => {
     res.render("index")
 })
 app.post("/convert-mp3", async (req, res) => {
-    const videoID = req.body.videoID;
+    const videoId = req.body.videoID;
     if(
-        videoID === undefined || 
-        videoID === "" ||
-        videoID === null
+        videoId === undefined || 
+        videoId === "" ||
+        videoId === null
     ){
         return res.render("index", {success : false, message : "Please enter a video ID"});
     }else{
-        const fetchAPI = await fetch(`https://youtube-mp36.p.rapidapi.com/dl?id=${videoID}`, {
+        const fetchAPI = await fetch(`https://youtube-mp36.p.rapidapi.com/dl?id=${videoId}`, {
             "method" : "GET",
             "headers": {
                 "x-rapidapi-key" : process.env.API_KEY,
@@ -40,12 +40,13 @@ app.post("/convert-mp3", async (req, res) => {
 
         });
 
-        const fetcResponse = await fetchAPI.json();
+        const fetchResponse = await fetchAPI.json();
 
-        if(fetchReponse.status === "ok")
+        if(fetchResponse.status === "ok")
             return res.render("index", {success : true, song_title : fetchResponse.title, song_link : fetchResponse.link});
         else
             return res.render("index", {success : false, message : fetchResponse.msg});
+        
     }
 
 })
